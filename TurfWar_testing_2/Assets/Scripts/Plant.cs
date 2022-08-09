@@ -23,6 +23,7 @@ public class Plant : MonoBehaviour
     private bool IsMyTurn;
     private bool FirstRun;
     private bool MoveLocked;
+    public bool IsPlayerOneChar;
 
     //GameObjs
 
@@ -32,6 +33,9 @@ public class Plant : MonoBehaviour
     private GameObject[] ShotPreview = null;
     private GameObject fired_seed;
     public GameObject preview_square;
+    public GameObject SelectedEnemy;
+    private GameObject DisplayAttack;
+    private GameObject HitByAttack;
 
     //plant specific data
 
@@ -91,6 +95,9 @@ public class Plant : MonoBehaviour
             {
                 PlantMoveToSpot(x_move, y_move);
             }
+
+            RunAttackAnimation(DisplayAttack);
+
         }
 
         
@@ -360,28 +367,35 @@ public class Plant : MonoBehaviour
                                 if (PlantMapLayout[matxin, matyin] != "VOID" && PMovementZone[matxin, matyin] == 1)
                                 {
                                     //check to see that it's within range and on the enemy team
-
-                                    //ready to fire!
-                                    x_shot = matxin;
-                                    y_shot = matyin;
-                                    PlantToFire = true;
-                                    IsMapMade = false;
-                                    FirstRun = true;
-                                    MoveLocked = true;
-
-                                    //delete the old Movement Zone data
-                                    for (int i = 0; i < mpsz; i++)
+                                    SelectedEnemy = GameObject.Find(PlantMapLayout[matxin, matyin]);
+                                    if (SelectedEnemy != null)
                                     {
-                                        for (int j = 0; j < mpsz; j++)
+                                        //if it's not on our team...
+                                        if (SelectedEnemy.GetComponent<Plant>().IsPlayerOneChar != IsPlayerOneChar)
                                         {
-                                            Destroy(MovementZoneObj[i, j]);
-                                        }
-                                    }
+                                            //ready to fire!
+                                            x_shot = matxin;
+                                            y_shot = matyin;
+                                            PlantToFire = true;
+                                            IsMapMade = false;
+                                            FirstRun = true;
+                                            MoveLocked = true;
 
-                                    if (ShotPreview != null)
-                                    {
-                                        for (int i = 0; i < 50; i++)
-                                            Destroy(ShotPreview[i]);
+                                            //delete the old Movement Zone data
+                                            for (int i = 0; i < mpsz; i++)
+                                            {
+                                                for (int j = 0; j < mpsz; j++)
+                                                {
+                                                    Destroy(MovementZoneObj[i, j]);
+                                                }
+                                            }
+
+                                            if (ShotPreview != null)
+                                            {
+                                                for (int i = 0; i < 50; i++)
+                                                    Destroy(ShotPreview[i]);
+                                            }
+                                        }
                                     }
 
                                     return;
@@ -528,7 +542,7 @@ public class Plant : MonoBehaviour
         }
     }
 
-    public void CreateStats(string Identifier)
+    public void CreateStats(string Identifier, bool player_num)
     {
         string[] array = Identifier.Split(' ');
         plantType = array[0];
@@ -537,6 +551,7 @@ public class Plant : MonoBehaviour
         PHealth =           int.Parse(array[2]);
         PAttack =           int.Parse(array[3]);
         PDefense =          int.Parse(array[4]);
+        IsPlayerOneChar = player_num;
 
         identifier = Identifier;
     }
@@ -551,7 +566,15 @@ public class Plant : MonoBehaviour
 
     }
 
+    public void SetDisplayAttack(GameObject AttackAnimation)
+    {
+        DisplayAttack = AttackAnimation;
+    }
 
+    public void SetHitByAttack(GameObject AttackAnimation)
+    {
+        HitByAttack = AttackAnimation;
+    }
 
 }
 

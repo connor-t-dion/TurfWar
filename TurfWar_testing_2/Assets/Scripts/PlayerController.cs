@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
             Plant1_OB = Instantiate(p1_OBJ, OldPos, Quaternion.identity);
             Plant1_OB.name = ident1;
             Plant1 = Plant1_OB.GetComponent<Plant>();
-            Plant1.CreateStats(ident1);
+            Plant1.CreateStats(ident1, isPlayer1);
             Plant1.SetMyTurn(isMyTurn);
         }
         

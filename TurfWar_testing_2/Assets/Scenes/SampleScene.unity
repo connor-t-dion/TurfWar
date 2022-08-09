@@ -1217,17 +1217,20 @@ MonoBehaviour:
   IsMapMade: 0
   PlantToMove: 0
   PlantToFire: 0
+  IsPlayerOneChar: 0
   moveTile: {fileID: 515945972}
   moveTileSW: {fileID: 2049067684}
   preview_square: {fileID: 1664498010}
+  SelectedEnemy: {fileID: 0}
   PMovementSpeed: 20
   PHealth: 0
   PAttack: 0
   PDefense: 0
   plantType: 
   moveType: notMyTurn
-  DisplayAttack: {fileID: 566093625}
   seed: {fileID: 697715255}
+  DisplayAtk: {fileID: 566093625}
+  HitByAtk: {fileID: 0}
   identifier2: wtrmln
 --- !u!1 &876988214
 GameObject:
