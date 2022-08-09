@@ -63,7 +63,7 @@ public class Plant : MonoBehaviour
         FirstRun = true;
         MoveLocked = false;
         animator = GetComponent<Animator>();
-        moveType = "range";
+        moveType = "move";
     }
 
     // Update is called once per frame
@@ -71,7 +71,7 @@ public class Plant : MonoBehaviour
     {
         if (IsMyTurn)
         {
-            GetPlantMovementZone();
+            GetPlantMovementZone(PMovementSpeed);
 
             if (moveType == "range" && PlantToFire != true)
             {
@@ -118,13 +118,13 @@ public class Plant : MonoBehaviour
     }
 
     //use this function to create the acceptable movement grid (blue squares) for our plant
-    private void GetPlantMovementZone()
+    private void GetPlantMovementZone(float radius)
     {
         // have we made the allowable walking range? If we have, don't make it again
         if (!IsMapMade)
         {
             int mpsz = gameObject.GetComponent<MapMatrixData>().MapSize;
-            int tiles = (int)Mathf.Round((float)(PMovementSpeed / 5));
+            int tiles = (int)Mathf.Round((float)(radius / 5));
             PMovementZone = new int[mpsz, mpsz];
 
             for (int i = 0; i < mpsz; i++)
