@@ -17,10 +17,11 @@ public class Plant : MonoBehaviour
     //boolean vars
 
     public bool IsMapMade;
+    public bool IsMapMadePlace;
     public bool PlantToMove;
     public bool PlantToFire; //ranged attacks
     private bool PlantShotPreview = false;
-    private bool IsMyTurn;
+    private bool IsMyTurn = false;
     private bool FirstRun;
     private bool MoveLocked;
     public bool IsPlayerOneChar;
@@ -30,6 +31,7 @@ public class Plant : MonoBehaviour
     public GameObject moveTile;
     public GameObject moveTileSW;
     private GameObject[,] MovementZoneObj;
+    private GameObject[,] PlacementZoneObj;
     private GameObject[] ShotPreview = null;
     private GameObject fired_seed;
     public GameObject preview_square;
@@ -44,6 +46,7 @@ public class Plant : MonoBehaviour
     public int PAttack;
     public int PDefense;
     private int[,] PMovementZone;
+    private int[,] PPlacementZone;
     private string identifier;
     public string plantType;
     public string moveType = "notMyTurn";
@@ -69,6 +72,11 @@ public class Plant : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
+
+        if (IsMyTurn && moveType == "setup")
+        {
+            AllowInitialPlantPlacement();
+        }
         if (IsMyTurn)
         {
             GetPlantMovementZone(PMovementSpeed);
@@ -316,11 +324,11 @@ public class Plant : MonoBehaviour
             double HeightMod = GameObject.Find("Select").GetComponent<MouseControl>().HeightFromBlock;
 
             //go from the Unity coordinate space to the matrix space (unapplying height mod)
-            double x = posInd.x + 0.5;
-            double y = posInd.y + 1.25 - 0.5 * HeightMod;
+            double x2 = posInd.x + 0.5;
+            double y2 = posInd.y + 1.25 - 0.5 * HeightMod;
 
-            double matx = Mathf.Round((float)(x + 2 * y));
-            double maty = Mathf.Round((float)(-x + 2 * y));
+            double matx = Mathf.Round((float)(x2 + 2 * y2));
+            double maty = Mathf.Round((float)(-x2 + 2 * y2));
 
             int mpsz = gameObject.GetComponent<MapMatrixData>().MapSize;
 
@@ -396,6 +404,42 @@ public class Plant : MonoBehaviour
                                                     Destroy(ShotPreview[i]);
                                             }
                                         }
+                                    }
+
+                                    return;
+                                }
+                                break;
+                            }
+                        case "setup":
+                            {
+                                //MOVEMENT
+                                //if that is an acceptable spot (within our PMoveZone), initiate movement
+                                if (PPlacementZone[matxin, matyin] == 1)
+                                {
+                                    x = matxin;
+                                    y = matyin;
+
+                                    Vector2 pos = gameObject.GetComponent<MapMatrixData>().GetBlockCoords(matxin, matyin, true);
+
+                                    transform.position = pos;
+
+                                    //delete the old Movement Zone data
+                                    for (int i = 0; i < mpsz; i++)
+                                    {
+                                        for (int j = 0; j < mpsz; j++)
+                                        {
+                                            Destroy(PlacementZoneObj[i, j]);
+                                        }
+                                    }
+
+                                    moveType = "done";
+                                    if (IsPlayerOneChar)
+                                    {
+                                        GameObject.Find("Player1").GetComponent<PlayerController>().EndMyTurn();
+                                    }
+                                    else
+                                    {
+                                        GameObject.Find("Player2").GetComponent<PlayerController>().EndMyTurn();
                                     }
 
                                     return;
@@ -574,6 +618,111 @@ public class Plant : MonoBehaviour
     public void SetHitByAttack(GameObject AttackAnimation)
     {
         HitByAttack = AttackAnimation;
+    }
+
+    public void isPlantSetup()
+    {
+        moveType = "setup";
+    }
+
+    private void AllowInitialPlantPlacement()
+    {
+        //we set the available area to place. for now, ill make it so you can place anywhere
+        // have we made the allowable walking range? If we have, don't make it again
+        if (!IsMapMadePlace)
+        {
+            int mpsz = gameObject.GetComponent<MapMatrixData>().MapSize;
+            int radius = (int)Mathf.Round((float) (mpsz/2));
+            x = radius;
+            y = radius;
+            radius *= 2;
+            int tiles = (int)Mathf.Round((float)(radius / 5));
+            PPlacementZone = new int[mpsz, mpsz];
+
+            for (int i = 0; i < mpsz; i++)
+            {
+                for (int j = 0; j < mpsz; j++)
+                {
+                    PPlacementZone[i, j] = 0;
+                }
+            }
+
+            // make a new placement object to contain our sprites
+            // (might not need to make new every time?)
+            PlacementZoneObj = new GameObject[mpsz, mpsz];
+
+            for (int i = -tiles; i <= tiles; i++)
+            {
+                for (int j = -tiles; j <= tiles; j++)
+                {
+                    //make sure we aren't trying to add outside the matrix range (-1, mpsz)
+                    if ((i + x) >= 0 && (i + x) <= mpsz - 1 && (j + y) >= 0 && (j + y) <= mpsz - 1)
+                    {
+
+                            float BlockData = (float)gameObject.GetComponent<MapMatrixData>().BlockFeature[i + x, y + j];
+
+                            if (BlockData != -1)
+                            {
+                                AddBlockToPlaceRange(x + i, y + j);
+                            }
+                            //If we aren't a real block
+                            else
+                            {
+                                //add the block above it to the range 
+                                if ((i + x + 1) >= 0 && (i + x + 1) <= mpsz - 1 &&
+                                    (j + y + 1) >= 0 && (j + y + 1) <= mpsz - 1)
+                                {
+                                    //(IF WE DONT ALREADY HAVE THAT IN OUR DIAMOND)
+                                    if ((Mathf.Abs(((float)i + 1) + Mathf.Abs((float)j + 1)) > tiles ||
+                                        -Mathf.Abs(((float)i + 1) - Mathf.Abs((float)j + 1)) < -tiles))
+
+                                    {
+                                        AddBlockToPlaceRange(x + i + 1, y + j + 1);
+                                    }
+                                }
+                                //and add below it
+                                if ((i + x - 1) >= 0 && (i + x - 1) <= mpsz - 1 &&
+                                    (j + y - 1) >= 0 && (j + y - 1) <= mpsz - 1)
+                                {
+                                    //(IF WE DONT ALREADY HAVE THAT IN OUR DIAMOND)
+                                    if ((Mathf.Abs(((float)i - 1) + Mathf.Abs((float)j - 1)) > tiles ||
+                                        -Mathf.Abs(((float)i - 1) - Mathf.Abs((float)j - 1)) < -tiles))
+
+                                    {
+                                        AddBlockToPlaceRange(x + i - 1, y + j - 1);
+                                    }
+                                }
+                            }
+
+                    }
+                }
+            }
+            IsMapMadePlace = true;
+        }
+    }
+
+    //Make the sprite for the movement zone, if it is a valid spot
+    private void AddBlockToPlaceRange(int x_block, int y_block)
+    {
+        Vector2 pos = gameObject.GetComponent<MapMatrixData>().GetBlockCoords(x_block, y_block, true);
+        pos.y = (float)(pos.y - .175);
+        float BlockData = (float)gameObject.GetComponent<MapMatrixData>().BlockFeature[x_block, y_block];
+
+        //if valid spot
+        if (BlockData != -1)
+        {
+            //if it'snot a sw slope (will alter for more features)
+            if (BlockData != 0.125)
+                PlacementZoneObj[x_block, y_block] = Instantiate(moveTile, pos, Quaternion.identity);
+            else
+            {
+                //use sw slope sprite
+                pos.y = (float)(pos.y + 0.5);
+                PlacementZoneObj[x_block, y_block] = Instantiate(moveTileSW, pos, Quaternion.identity);
+            }
+            //mark that it is indeed a movement tile
+            PPlacementZone[x_block, y_block] = 1;
+        }
     }
 
 }

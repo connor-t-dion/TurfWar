@@ -1265,7 +1265,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 800080240}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5000004, y: -0.62500054, z: 0}
+  m_LocalPosition: {x: -1.5, y: -4.73, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1322,6 +1322,7 @@ MonoBehaviour:
   x_shot: 0
   y_shot: 0
   IsMapMade: 0
+  IsMapMadePlace: 0
   PlantToMove: 0
   PlantToFire: 0
   IsPlayerOneChar: 0
@@ -1374,14 +1375,15 @@ MonoBehaviour:
   isSetup: 0
   OtherPlayer: {fileID: 940076104}
   PlantOrderFinal: []
-  p1_OBJ: {fileID: 0}
+  p1_OBJ: {fileID: 800080240}
   p2_OBJ: {fileID: 0}
   p3_OBJ: {fileID: 0}
   p4_OBJ: {fileID: 0}
-  ident1: wm 10 40 15 15
+  ident1: wm 10 40 10 10
   ident2: wm 10 40 15 15 5373455
   ident3: wm 10 40 15 15 5373456
   ident4: wm 10 40 15 15 5373457
+  it: 0
 --- !u!4 &876988216
 Transform:
   m_ObjectHideFlags: 0
@@ -1471,6 +1473,7 @@ MonoBehaviour:
   ident2: wm 10 40 15 15 5373455
   ident3: wm 10 40 15 15 5373456
   ident4: wm 10 40 15 15 5373457
+  it: 0
 --- !u!4 &940076106
 Transform:
   m_ObjectHideFlags: 0

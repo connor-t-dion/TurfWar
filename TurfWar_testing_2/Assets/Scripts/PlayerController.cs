@@ -7,12 +7,12 @@ public class PlayerController : MonoBehaviour
 {
     //we set one player to be player 1. They take the lead on rolling for who goes first, shared actions, etc
     public bool isPlayer1;
-    public bool isMyTurn = true;
+    public bool isMyTurn = false;
     public bool myTurnToEnd = false;
     public bool isSetup;
     public GameObject OtherPlayer;
     private PlayerController OtherPlayerPC;
-    public List<string> PlantOrderFinal;
+    public List<string> PlantOrderFinal = new List<string> { };
 
     //for testing, we allow players to be set publically
     private Plant Plant1;
@@ -36,37 +36,20 @@ public class PlayerController : MonoBehaviour
     public string ident3 = "wm 10 40 15 15 5373456";
     public string ident4 = "wm 10 40 15 15 5373457";
 
-    private int Plant1_speed = 0;
-    private int Plant2_speed = 1;
-    private int Plant3_speed = 2;
-    private int Plant4_speed = 3;
+    private float Plant1_speed = 0;
+    private float Plant2_speed = 1;
+    private float Plant3_speed = 2;
+    private float Plant4_speed = 3;
+
+    public int it = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        //we want to only do this once, hence we assign a player 1 to handle it
-        if (isPlayer1)
-        {
-            OtherPlayerPC = OtherPlayer.GetComponent<PlayerController>();
+        OtherPlayerPC = OtherPlayer.GetComponent<PlayerController>();
 
-            //determine who goes first via a random roll (can be changed)
-            float Roll = Random.Range(0f,1f);
-            if ( Roll > 0.0 )
-            {
-                //P1 turn first, then P2
-                isMyTurn = true;
-                OtherPlayerPC.isMyTurn = false;
-            }
-            else
-            {
-                //P2 turn first, then P1
-                isMyTurn = false;
-                OtherPlayerPC.SetMyTurn(true);
-            }
-            
-        }
-
-        Vector2 OldPos = new Vector2(0, 0);
+        //set wayyyy off screen (will adjust when its our turn to place)
+        Vector2 OldPos = new Vector2(50, 50);
         if (p1_OBJ != null)
         {
             Plant1_OB = Instantiate(p1_OBJ, OldPos, Quaternion.identity);
@@ -107,6 +90,12 @@ public class PlayerController : MonoBehaviour
             Plant4_speed = Plant4.PMovementSpeed;
         }
 
+        //proud of this one. adding a random decimal allows us to work around speed ties and give each number a unique value
+        Plant1_speed += Random.Range(0f, 1f);
+        Plant2_speed += Random.Range(0f, 1f);
+        Plant3_speed += Random.Range(0f, 1f);
+        Plant4_speed += Random.Range(0f, 1f);
+
         isSetup = true;
 
     }
@@ -119,9 +108,8 @@ public class PlayerController : MonoBehaviour
             //set up turn order
             if (isPlayer1)
             {
-                
+                setupTurns();
             }
-
             isSetup = false;
         }
 
@@ -133,10 +121,35 @@ public class PlayerController : MonoBehaviour
 
         if (myTurnToEnd)
         {
-            //P2 turn first, then P1
             isMyTurn = false;
-            OtherPlayerPC.SetMyTurn(true);
+            //end plants turn
+
             myTurnToEnd = false;
+            OtherPlayerPC.it += 1;
+            it += 1;
+            //reset if too large
+            if (it > 7)
+            {
+                OtherPlayerPC.it = 0;
+                it = 0;
+            }
+
+            //get next available plant in order. It's their turn now
+            GameObject NextPlant = GameObject.Find(PlantOrderFinal[it]);
+            if (NextPlant != null)
+            {
+                if (NextPlant.GetComponent<Plant>().IsPlayerOneChar == isPlayer1)
+                {
+                    isMyTurn = true;
+                }
+                else
+                {
+                    OtherPlayerPC.isMyTurn = true;
+                }
+                NextPlant.GetComponent<Plant>().SetMyTurn(true);
+            }
+
+
         }
 
     }
@@ -145,5 +158,36 @@ public class PlayerController : MonoBehaviour
     {
         //for setting the player controller's isMyTurn once the plant has finished their action
         isMyTurn = value;
+    }
+
+    public void EndMyTurn()
+    {
+        myTurnToEnd = true;
+    }
+
+    private void setupTurns()
+    {
+        var PlantSpeeds = new List<float> { Plant1_speed, Plant2_speed, Plant3_speed, Plant4_speed, OtherPlayerPC.Plant1_speed, OtherPlayerPC.Plant2_speed, OtherPlayerPC.Plant3_speed, OtherPlayerPC.Plant4_speed };
+        var PlantID = new List<string> { ident1, ident2, ident3, ident4, OtherPlayerPC.ident1, OtherPlayerPC.ident2, OtherPlayerPC.ident3, OtherPlayerPC.ident4 };
+        var arrPlantSpeeds = PlantSpeeds.OrderByDescending(x => x);
+        List<float> arrPlantSpeeds2 = new List<float>();
+        foreach (float x in arrPlantSpeeds)
+        {
+            arrPlantSpeeds2.Add(x);
+            int i = PlantSpeeds.FindIndex(a => a == x);
+            PlantOrderFinal.Add(PlantID[i]);
+            OtherPlayerPC.PlantOrderFinal.Add(PlantID[i]);
+        }
+
+        GameObject FirstPlant = GameObject.Find(PlantID[0]);
+        if (FirstPlant != null)
+        {
+            if (FirstPlant.GetComponent<Plant>().IsPlayerOneChar == isPlayer1)
+            {
+                isMyTurn = true;
+                FirstPlant.GetComponent<Plant>().SetMyTurn(true);
+                FirstPlant.GetComponent<Plant>().isPlantSetup();
+            }
+        }
     }
 }
