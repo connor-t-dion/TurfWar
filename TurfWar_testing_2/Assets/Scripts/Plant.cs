@@ -25,6 +25,7 @@ public class Plant : MonoBehaviour
     private bool FirstRun;
     private bool MoveLocked;
     public bool IsPlayerOneChar;
+    public bool HasBeenSetup = false;
 
     //GameObjs
 
@@ -73,13 +74,14 @@ public class Plant : MonoBehaviour
     public void Update()
     {
 
-        if (IsMyTurn && moveType == "setup")
+        if (IsMyTurn && moveType == "setup" && !IsMapMadePlace)
         {
             AllowInitialPlantPlacement();
         }
         if (IsMyTurn)
         {
-            GetPlantMovementZone(PMovementSpeed);
+            if (moveType == "move")
+                GetPlantMovementZone(PMovementSpeed);
 
             if (moveType == "range" && PlantToFire != true)
             {
@@ -283,41 +285,45 @@ public class Plant : MonoBehaviour
         Vector2 OldPos = gameObject.GetComponent<MapMatrixData>().GetBlockCoords(x, y, true);
         Vector2 NewPos = gameObject.GetComponent<MapMatrixData>().GetBlockCoords(xNew, yNew, true);
 
-        if (PlantToMove == false)
+        if (plantType == "wm")
         {
-            animator.SetInteger("Watermellon_Movement", 0);
-        }
+            if (PlantToMove == false)
+            {
+                animator.SetInteger("Watermellon_Movement", 0);
+            }
 
-        // Move Right Up
-        else if ((OldPos.x < NewPos.x) && (OldPos.y > NewPos.y))
-        {
-            animator.SetInteger("Watermellon_Movement", 1);
-        }
+            // Move Right Up
+            else if ((OldPos.x < NewPos.x) && (OldPos.y > NewPos.y))
+            {
+                animator.SetInteger("Watermellon_Movement", 1);
+            }
 
-        // Move Right Down
-        else if ((OldPos.x < NewPos.x) && (OldPos.y < NewPos.y))
-        {
-            animator.SetInteger("Watermellon_Movement", 2);
-        }
+            // Move Right Down
+            else if ((OldPos.x < NewPos.x) && (OldPos.y < NewPos.y))
+            {
+                animator.SetInteger("Watermellon_Movement", 2);
+            }
 
-        // Move Left Down
-        else if ((OldPos.x > NewPos.x) && (OldPos.y > NewPos.y))
-        {
-            animator.SetInteger("Watermellon_Movement", 3);
-        }
+            // Move Left Down
+            else if ((OldPos.x > NewPos.x) && (OldPos.y > NewPos.y))
+            {
+                animator.SetInteger("Watermellon_Movement", 3);
+            }
 
-        // Move Left Up
-        else if ((OldPos.x > NewPos.x) && (OldPos.y < NewPos.y))
-        {
-            animator.SetInteger("Watermellon_Movement", 4);
+            // Move Left Up
+            else if ((OldPos.x > NewPos.x) && (OldPos.y < NewPos.y))
+            {
+                animator.SetInteger("Watermellon_Movement", 4);
+            }
         }
+        
     }
 
     //All actions to deal with the left click
     private void LeftClick()
     {
         //make sure PMovementZone has been made
-        if (PMovementZone != null && !MoveLocked)
+        if (!MoveLocked)
         {
             //get the position of the select cursor, plus the height modifier for the block it is on
             var posInd = GameObject.Find("Select").transform.position;
@@ -420,6 +426,7 @@ public class Plant : MonoBehaviour
                                     y = matyin;
 
                                     Vector2 pos = gameObject.GetComponent<MapMatrixData>().GetBlockCoords(matxin, matyin, true);
+                                    pos.y += + (float)0.18;
 
                                     transform.position = pos;
 
@@ -433,6 +440,8 @@ public class Plant : MonoBehaviour
                                     }
 
                                     moveType = "done";
+                                    HasBeenSetup = true;
+                                    IsMyTurn = false;
                                     if (IsPlayerOneChar)
                                     {
                                         GameObject.Find("Player1").GetComponent<PlayerController>().EndMyTurn();
@@ -709,7 +718,7 @@ public class Plant : MonoBehaviour
         float BlockData = (float)gameObject.GetComponent<MapMatrixData>().BlockFeature[x_block, y_block];
 
         //if valid spot
-        if (BlockData != -1)
+        if (BlockData != -1 && PlacementZoneObj[x_block, y_block] == null)
         {
             //if it'snot a sw slope (will alter for more features)
             if (BlockData != 0.125)
@@ -723,6 +732,11 @@ public class Plant : MonoBehaviour
             //mark that it is indeed a movement tile
             PPlacementZone[x_block, y_block] = 1;
         }
+    }
+
+    public bool GetPlayerNum()
+    {
+        return IsPlayerOneChar;
     }
 
 }

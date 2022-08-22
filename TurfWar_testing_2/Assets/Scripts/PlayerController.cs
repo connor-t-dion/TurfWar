@@ -10,7 +10,9 @@ public class PlayerController : MonoBehaviour
     public bool isMyTurn = false;
     public bool myTurnToEnd = false;
     public bool isSetup;
+    public bool UIisUp = false;
     public GameObject OtherPlayer;
+    public GameObject UI;
     private PlayerController OtherPlayerPC;
     public List<string> PlantOrderFinal = new List<string> { };
 
@@ -50,43 +52,43 @@ public class PlayerController : MonoBehaviour
 
         //set wayyyy off screen (will adjust when its our turn to place)
         Vector2 OldPos = new Vector2(50, 50);
-        if (p1_OBJ != null)
+        if (p1_OBJ != null && Plant1_OB == null)
         {
             Plant1_OB = Instantiate(p1_OBJ, OldPos, Quaternion.identity);
             Plant1_OB.name = ident1;
             Plant1 = Plant1_OB.GetComponent<Plant>();
             Plant1.CreateStats(ident1, isPlayer1);
-            Plant1.SetMyTurn(isMyTurn);
+            Plant1.SetMyTurn(false);
             Plant1_speed = Plant1.PMovementSpeed;
         }
 
-        if (p2_OBJ != null)
+        if (p2_OBJ != null && Plant2_OB == null)
         {
             Plant2_OB = Instantiate(p2_OBJ, OldPos, Quaternion.identity);
             Plant2_OB.name = ident2;
-            Plant2 = Plant1_OB.GetComponent<Plant>();
+            Plant2 = Plant2_OB.GetComponent<Plant>();
             Plant2.CreateStats(ident2, isPlayer1);
-            Plant2.SetMyTurn(isMyTurn);
+            Plant2.SetMyTurn(false);
             Plant2_speed = Plant2.PMovementSpeed;
         }
 
-        if (p3_OBJ != null)
+        if (p3_OBJ != null && Plant3_OB == null)
         {
             Plant3_OB = Instantiate(p3_OBJ, OldPos, Quaternion.identity);
             Plant3_OB.name = ident3;
-            Plant3 = Plant1_OB.GetComponent<Plant>();
+            Plant3 = Plant3_OB.GetComponent<Plant>();
             Plant3.CreateStats(ident3, isPlayer1);
-            Plant3.SetMyTurn(isMyTurn);
+            Plant3.SetMyTurn(false);
             Plant3_speed = Plant3.PMovementSpeed;
         }
 
-        if (p4_OBJ != null)
+        if (p4_OBJ != null && Plant4_OB == null)
         {
             Plant4_OB = Instantiate(p4_OBJ, OldPos, Quaternion.identity);
             Plant4_OB.name = ident4;
-            Plant4 = Plant1_OB.GetComponent<Plant>();
+            Plant4 = Plant3_OB.GetComponent<Plant>();
             Plant4.CreateStats(ident4, isPlayer1);
-            Plant4.SetMyTurn(isMyTurn);
+            Plant4.SetMyTurn(false);
             Plant4_speed = Plant4.PMovementSpeed;
         }
 
@@ -115,7 +117,12 @@ public class PlayerController : MonoBehaviour
 
         if (isMyTurn)
         {
-
+            if (!UIisUp && isPlayer1)
+            {
+                Vector2 OldPos = new Vector2(.4f, 2.5f);
+                UI.SetActive(true);
+                UIisUp = true;
+            }
 
         }
 
@@ -134,21 +141,44 @@ public class PlayerController : MonoBehaviour
                 it = 0;
             }
 
-            //get next available plant in order. It's their turn now
-            GameObject NextPlant = GameObject.Find(PlantOrderFinal[it]);
-            if (NextPlant != null)
+            bool rep = true; //this is in case we encounter a null. got to the next in line
+
+            while(rep)
             {
-                if (NextPlant.GetComponent<Plant>().IsPlayerOneChar == isPlayer1)
+                //get next available plant in order. It's their turn now
+                GameObject NextPlant = GameObject.Find(PlantOrderFinal[it]);
+                if (NextPlant != null)
                 {
-                    isMyTurn = true;
+                    if (NextPlant.GetComponent<Plant>().GetPlayerNum() == isPlayer1)
+                    {
+                        isMyTurn = true;
+                    }
+                    else
+                    {
+                        OtherPlayerPC.isMyTurn = true;
+                        if (UI.active != false)
+                            UI.SetActive(false);
+                        UIisUp = false;
+                    }
+                    NextPlant.GetComponent<Plant>().SetMyTurn(true);
+                    if (NextPlant.GetComponent<Plant>().HasBeenSetup != true)
+                        NextPlant.GetComponent<Plant>().isPlantSetup();
+
+                    rep = false;
                 }
                 else
                 {
-                    OtherPlayerPC.isMyTurn = true;
+                    OtherPlayerPC.it += 1;
+                    it += 1;
+                    if (it > 7)
+                    {
+                        OtherPlayerPC.it = 0;
+                        it = 0;
+                    }
                 }
-                NextPlant.GetComponent<Plant>().SetMyTurn(true);
             }
-
+            
+            
 
         }
 
@@ -179,10 +209,10 @@ public class PlayerController : MonoBehaviour
             OtherPlayerPC.PlantOrderFinal.Add(PlantID[i]);
         }
 
-        GameObject FirstPlant = GameObject.Find(PlantID[0]);
+        GameObject FirstPlant = GameObject.Find(PlantOrderFinal[0]);
         if (FirstPlant != null)
         {
-            if (FirstPlant.GetComponent<Plant>().IsPlayerOneChar == isPlayer1)
+            if (FirstPlant.GetComponent<Plant>().GetPlayerNum() == isPlayer1)
             {
                 isMyTurn = true;
                 FirstPlant.GetComponent<Plant>().SetMyTurn(true);
