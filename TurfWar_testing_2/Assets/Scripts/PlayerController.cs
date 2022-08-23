@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     public string ident2 = "wm 10 40 15 15 5373455";
     public string ident3 = "wm 10 40 15 15 5373456";
     public string ident4 = "wm 10 40 15 15 5373457";
+    public string ident_active = "";
 
     private float Plant1_speed = 0;
     private float Plant2_speed = 1;
@@ -146,9 +147,12 @@ public class PlayerController : MonoBehaviour
             while(rep)
             {
                 //get next available plant in order. It's their turn now
+                ident_active = PlantOrderFinal[it];
+                OtherPlayerPC.ident_active = PlantOrderFinal[it];
                 GameObject NextPlant = GameObject.Find(PlantOrderFinal[it]);
                 if (NextPlant != null)
                 {
+                    NextPlant.GetComponent<Plant>().SetMoveType("null");
                     if (NextPlant.GetComponent<Plant>().GetPlayerNum() == isPlayer1)
                     {
                         isMyTurn = true;

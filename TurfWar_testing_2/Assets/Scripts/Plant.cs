@@ -26,6 +26,7 @@ public class Plant : MonoBehaviour
     private bool MoveLocked;
     public bool IsPlayerOneChar;
     public bool HasBeenSetup = false;
+    private bool IsUnderground = false;
 
     //GameObjs
 
@@ -107,6 +108,8 @@ public class Plant : MonoBehaviour
             }
 
             RunAttackAnimation(DisplayAttack);
+
+            CheckIfDone();
 
         }
 
@@ -293,30 +296,97 @@ public class Plant : MonoBehaviour
             }
 
             // Move Right Up
-            else if ((OldPos.x < NewPos.x) && (OldPos.y > NewPos.y))
+            else if ((OldPos.x <= NewPos.x) && (OldPos.y >= NewPos.y))
             {
                 animator.SetInteger("Watermellon_Movement", 1);
             }
 
             // Move Right Down
-            else if ((OldPos.x < NewPos.x) && (OldPos.y < NewPos.y))
+            else if ((OldPos.x <= NewPos.x) && (OldPos.y <= NewPos.y))
             {
                 animator.SetInteger("Watermellon_Movement", 2);
             }
 
             // Move Left Down
-            else if ((OldPos.x > NewPos.x) && (OldPos.y > NewPos.y))
+            else if ((OldPos.x >= NewPos.x) && (OldPos.y >= NewPos.y))
             {
                 animator.SetInteger("Watermellon_Movement", 3);
             }
 
             // Move Left Up
-            else if ((OldPos.x > NewPos.x) && (OldPos.y < NewPos.y))
+            else if ((OldPos.x >= NewPos.x) && (OldPos.y <= NewPos.y))
             {
                 animator.SetInteger("Watermellon_Movement", 4);
             }
         }
-        
+
+        if (plantType == "cr")
+        {
+            if (PlantToMove == false || (xNew == x && yNew == y))
+            {
+                animator.SetInteger("Carrot_Is_Moving", 5);
+                animator.SetInteger("Carrot_Start_Movement", 0);
+                IsUnderground = false;
+            }
+
+            // Move Right Up
+            else if ((OldPos.x <= NewPos.x) && (OldPos.y >= NewPos.y))
+            {
+                if (!IsUnderground)
+                {
+                    animator.SetInteger("Carrot_Start_Movement", 1);
+                    IsUnderground = true;
+                }
+                else
+                {
+                    animator.SetInteger("Carrot_Is_Moving", 1);
+                }
+                
+            }
+
+            // Move Right Down
+            else if ((OldPos.x <= NewPos.x) && (OldPos.y <= NewPos.y))
+            {
+                if (!IsUnderground)
+                {
+                    animator.SetInteger("Carrot_Start_Movement", 2);
+                    IsUnderground = true;
+                }
+                else
+                {
+                    animator.SetInteger("Carrot_Is_Moving", 2);
+                }
+            }
+
+            // Move Left Down
+            else if ((OldPos.x >= NewPos.x) && (OldPos.y >= NewPos.y))
+            {
+                if (!IsUnderground)
+                {
+                    animator.SetInteger("Carrot_Start_Movement", 3);
+                    IsUnderground = true;
+                }
+                else
+                {
+                    animator.SetInteger("Carrot_Is_Moving", 3);
+                }
+            }
+
+            // Move Left Up
+            else if ((OldPos.x >= NewPos.x) && (OldPos.y <= NewPos.y))
+            {
+                if (!IsUnderground)
+                {
+                    animator.SetInteger("Carrot_Start_Movement", 4);
+                    IsUnderground = true;
+                }
+                else
+                {
+                    animator.SetInteger("Carrot_Is_Moving", 4);
+                }
+            }
+        }
+
     }
 
     //All actions to deal with the left click
@@ -420,7 +490,7 @@ public class Plant : MonoBehaviour
                             {
                                 //MOVEMENT
                                 //if that is an acceptable spot (within our PMoveZone), initiate movement
-                                if (PPlacementZone[matxin, matyin] == 1)
+                                if (PPlacementZone[matxin, matyin] == 1 && PlantMapLayout[matxin, matyin] == "VOID")
                                 {
                                     x = matxin;
                                     y = matyin;
@@ -441,16 +511,6 @@ public class Plant : MonoBehaviour
 
                                     moveType = "done";
                                     HasBeenSetup = true;
-                                    IsMyTurn = false;
-                                    if (IsPlayerOneChar)
-                                    {
-                                        GameObject.Find("Player1").GetComponent<PlayerController>().EndMyTurn();
-                                    }
-                                    else
-                                    {
-                                        GameObject.Find("Player2").GetComponent<PlayerController>().EndMyTurn();
-                                    }
-
                                     return;
                                 }
                                 break;
@@ -634,6 +694,11 @@ public class Plant : MonoBehaviour
         moveType = "setup";
     }
 
+    public void SetMoveType(string type)
+    {
+        moveType = type;
+    }
+
     private void AllowInitialPlantPlacement()
     {
         //we set the available area to place. for now, ill make it so you can place anywhere
@@ -737,6 +802,44 @@ public class Plant : MonoBehaviour
     public bool GetPlayerNum()
     {
         return IsPlayerOneChar;
+    }
+
+    public void CheckIfDone()
+    {
+        if (moveType == "done")
+        {
+            int mpsz = gameObject.GetComponent<MapMatrixData>().MapSize;
+            IsMyTurn = false;
+            if (IsPlayerOneChar)
+            {
+                GameObject.Find("Player1").GetComponent<PlayerController>().EndMyTurn();
+            }
+            else
+            {
+                GameObject.Find("Player2").GetComponent<PlayerController>().EndMyTurn();
+            }
+
+            if (PMovementZone != null)
+            {
+                PMovementZone = null;
+            }
+
+            if (MovementZoneObj != null)
+            {
+                for (int i = 0; i < mpsz; i++)
+                {
+                    for (int j = 0; j < mpsz; j++)
+                    {
+                        Destroy(MovementZoneObj[i, j]);
+                    }
+                }
+            }
+
+            PlantToMove = false;
+            IsMapMade = false;
+            MoveLocked = false;
+
+        }
     }
 
 }

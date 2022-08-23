@@ -7,10 +7,12 @@ using UnityEngine.UI;
 public class UIButton : MonoBehaviour
 {
     public Button yourButton;
+    private string buttonname;
     // Start is called before the first frame update
     void Start()
     {
         Button btn = yourButton.GetComponent<Button>();
+        buttonname = btn.name;
         btn.onClick.AddListener(TaskOnClick);
     }
 
@@ -22,6 +24,12 @@ public class UIButton : MonoBehaviour
 
     void TaskOnClick()
     {
-        Debug.Log("You have clicked the button!");
+        string plant = GameObject.Find("Player1").GetComponent<PlayerController>().ident_active;
+        GameObject PlantGO = GameObject.Find(plant);
+
+        if (PlantGO != null)
+        {
+            PlantGO.GetComponent<Plant>().SetMoveType(buttonname);
+        }
     }
 }
