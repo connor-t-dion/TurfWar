@@ -33,10 +33,11 @@ public class PlayerController : MonoBehaviour
     public GameObject p4_OBJ;
     private GameObject Plant4_OB;
 
-    public string ident1 = "wm 10 40 15 15 5373452";
-    public string ident2 = "wm 10 40 15 15 5373455";
-    public string ident3 = "wm 10 40 15 15 5373456";
-    public string ident4 = "wm 10 40 15 15 5373457";
+    //                    type,mv,hp,at,df,sp,sa,sd 
+    public string ident1 = "wm 10 40 15 15 30 00 10 5373452";
+    public string ident2 = "wm 10 40 15 15 30 00 10 5373455";
+    public string ident3 = "wm 10 40 15 15 30 00 10 5373456";
+    public string ident4 = "wm 10 40 15 15 30 00 10 5373457";
     public string ident_active = "";
 
     private float Plant1_speed = 0;
@@ -45,6 +46,7 @@ public class PlayerController : MonoBehaviour
     private float Plant4_speed = 3;
 
     public int it = 0;
+    private float timer;
 
     // Start is called before the first frame update
     void Start()
@@ -60,7 +62,7 @@ public class PlayerController : MonoBehaviour
             Plant1 = Plant1_OB.GetComponent<Plant>();
             Plant1.CreateStats(ident1, isPlayer1);
             Plant1.SetMyTurn(false);
-            Plant1_speed = Plant1.PMovementSpeed;
+            Plant1_speed = Plant1.PSpeed;
         }
 
         if (p2_OBJ != null && Plant2_OB == null)
@@ -70,7 +72,7 @@ public class PlayerController : MonoBehaviour
             Plant2 = Plant2_OB.GetComponent<Plant>();
             Plant2.CreateStats(ident2, isPlayer1);
             Plant2.SetMyTurn(false);
-            Plant2_speed = Plant2.PMovementSpeed;
+            Plant2_speed = Plant2.PSpeed;
         }
 
         if (p3_OBJ != null && Plant3_OB == null)
@@ -80,7 +82,7 @@ public class PlayerController : MonoBehaviour
             Plant3 = Plant3_OB.GetComponent<Plant>();
             Plant3.CreateStats(ident3, isPlayer1);
             Plant3.SetMyTurn(false);
-            Plant3_speed = Plant3.PMovementSpeed;
+            Plant3_speed = Plant3.PSpeed;
         }
 
         if (p4_OBJ != null && Plant4_OB == null)
@@ -90,7 +92,7 @@ public class PlayerController : MonoBehaviour
             Plant4 = Plant3_OB.GetComponent<Plant>();
             Plant4.CreateStats(ident4, isPlayer1);
             Plant4.SetMyTurn(false);
-            Plant4_speed = Plant4.PMovementSpeed;
+            Plant4_speed = Plant4.PSpeed;
         }
 
         //proud of this one. adding a random decimal allows us to work around speed ties and give each number a unique value
@@ -123,6 +125,13 @@ public class PlayerController : MonoBehaviour
                 Vector2 OldPos = new Vector2(.4f, 2.5f);
                 UI.SetActive(true);
                 UIisUp = true;
+            }
+
+            if (!isPlayer1)
+            {
+                //activate AI
+                CPU_AI();
+                //for now, we wait five seconds and swap back to another player
             }
 
         }
@@ -163,6 +172,7 @@ public class PlayerController : MonoBehaviour
                         if (UI.active != false)
                             UI.SetActive(false);
                         UIisUp = false;
+                        timer = Time.time;
                     }
                     NextPlant.GetComponent<Plant>().SetMyTurn(true);
                     if (NextPlant.GetComponent<Plant>().HasBeenSetup != true)
@@ -181,8 +191,6 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
-            
-            
 
         }
 
@@ -222,6 +230,14 @@ public class PlayerController : MonoBehaviour
                 FirstPlant.GetComponent<Plant>().SetMyTurn(true);
                 FirstPlant.GetComponent<Plant>().isPlantSetup();
             }
+        }
+    }
+
+    private void CPU_AI()
+    {
+        if(Time.time-timer > 5)
+        {
+            EndMyTurn();
         }
     }
 }

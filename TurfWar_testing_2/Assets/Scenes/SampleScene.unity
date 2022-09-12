@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 172848286}
   - component: {fileID: 172848285}
+  - component: {fileID: 172848287}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -171,6 +172,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &172848287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 172848284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deeeae579bd49874d8ddd7e79e415849, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MapSize: 10
 --- !u!1 &408691574
 GameObject:
   m_ObjectHideFlags: 0
@@ -1147,20 +1161,25 @@ MonoBehaviour:
   IsMapMadePlace: 0
   PlantToMove: 0
   PlantToFire: 0
+  PlantToMelee: 0
   IsPlayerOneChar: 0
   HasBeenSetup: 0
   moveTile: {fileID: 515945972}
   moveTileSW: {fileID: 2049067684}
   preview_square: {fileID: 1664498010}
   SelectedEnemy: {fileID: 0}
-  PMovementSpeed: 10
+  Grid: {fileID: 0}
+  PMovement: 10
   PHealth: 0
   PAttack: 0
   PDefense: 0
+  PSpeed: 0
+  PSpAttack: 0
+  PSpDefense: 0
   plantType: 
   moveType: notMyTurn
   seed: {fileID: 697715255}
-  DisplayAtk: {fileID: 0}
+  DisplayAtk: {fileID: 1566367908}
   HitByAtk: {fileID: 0}
   identifier2: carrot
 --- !u!1 &566093625
@@ -1181,7 +1200,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &566093626
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1283,7 +1302,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &588296013
 Transform:
   m_ObjectHideFlags: 0
@@ -1857,20 +1876,25 @@ MonoBehaviour:
   IsMapMadePlace: 0
   PlantToMove: 0
   PlantToFire: 0
+  PlantToMelee: 0
   IsPlayerOneChar: 0
   HasBeenSetup: 0
   moveTile: {fileID: 515945972}
   moveTileSW: {fileID: 2049067684}
   preview_square: {fileID: 1664498010}
   SelectedEnemy: {fileID: 0}
-  PMovementSpeed: 20
+  Grid: {fileID: 0}
+  PMovement: 10
   PHealth: 0
   PAttack: 0
   PDefense: 0
+  PSpeed: 0
+  PSpAttack: 0
+  PSpDefense: 0
   plantType: 
   moveType: notMyTurn
   seed: {fileID: 697715255}
-  DisplayAtk: {fileID: 566093625}
+  DisplayAtk: {fileID: 1566367908}
   HitByAtk: {fileID: 588296012}
   identifier2: wtrmln
 --- !u!1 &876988214
@@ -1914,10 +1938,10 @@ MonoBehaviour:
   p2_OBJ: {fileID: 0}
   p3_OBJ: {fileID: 0}
   p4_OBJ: {fileID: 0}
-  ident1: wm 9 40 10 10
-  ident2: wm 8 40 15 15 5373455
-  ident3: wm 8 40 15 15 5373456
-  ident4: wm 8 40 15 15 5373457
+  ident1: wm 9 40 10 10 32 00 10
+  ident2: wm 8 40 15 15 30 00 10 5373455
+  ident3: wm 8 40 15 15 30 00 10 5373456
+  ident4: wm 8 40 15 15 30 00 10 5373457
   ident_active: 
   it: 0
 --- !u!4 &876988216
@@ -2142,10 +2166,10 @@ MonoBehaviour:
   p2_OBJ: {fileID: 550083388}
   p3_OBJ: {fileID: 0}
   p4_OBJ: {fileID: 0}
-  ident1: wm 10 40 15 15
-  ident2: cr 15 40 20 20 5373455
-  ident3: wm 8 40 15 15 5373456
-  ident4: wm 8 40 15 15 5373457
+  ident1: wm 10 40 15 15 35 00 10
+  ident2: cr 15 40 20 20 40 00 10 5373455
+  ident3: wm 8 40 15 15 30 00 10 5373456
+  ident4: wm 8 40 15 15 30 00 10 5373457
   ident_active: 
   it: 0
 --- !u!4 &940076106
@@ -2692,7 +2716,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1566367909
 Transform:
   m_ObjectHideFlags: 0
@@ -3549,7 +3573,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1792642870
 RectTransform:
   m_ObjectHideFlags: 0

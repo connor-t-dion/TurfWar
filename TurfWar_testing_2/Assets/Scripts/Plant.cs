@@ -20,6 +20,7 @@ public class Plant : MonoBehaviour
     public bool IsMapMadePlace;
     public bool PlantToMove;
     public bool PlantToFire; //ranged attacks
+    public bool PlantToMelee = false;
     private bool PlantShotPreview = false;
     private bool IsMyTurn = false;
     private bool FirstRun;
@@ -40,13 +41,17 @@ public class Plant : MonoBehaviour
     public GameObject SelectedEnemy;
     private GameObject DisplayAttack;
     private GameObject HitByAttack;
+    public GameObject Grid;
 
     //plant specific data
 
-    public int PMovementSpeed = 10;
+    public int PMovement = 10;
     public int PHealth;
     public int PAttack;
     public int PDefense;
+    public int PSpeed;
+    public int PSpAttack;
+    public int PSpDefense;
     private int[,] PMovementZone;
     private int[,] PPlacementZone;
     private string identifier;
@@ -58,7 +63,7 @@ public class Plant : MonoBehaviour
     private Animator animator;
 
     
-    private bool isShowing; //Create a Boolian for displaying the assigned item
+    private bool isShowing = false; //Create a Boolian for displaying the assigned item
 
     // Start is called before the first frame update
     public void Start()
@@ -69,6 +74,7 @@ public class Plant : MonoBehaviour
         MoveLocked = false;
         animator = GetComponent<Animator>();
         moveType = "move";
+        Grid = GameObject.Find("Grid");
     }
 
     // Update is called once per frame
@@ -82,7 +88,9 @@ public class Plant : MonoBehaviour
         if (IsMyTurn)
         {
             if (moveType == "move")
-                GetPlantMovementZone(PMovementSpeed);
+                GetPlantMovementZone(PMovement);
+            else if (moveType == "melee")
+                GetPlantMovementZone(6);
 
             if (moveType == "range" && PlantToFire != true)
             {
@@ -107,7 +115,22 @@ public class Plant : MonoBehaviour
                 PlantMoveToSpot(x_move, y_move);
             }
 
-            RunAttackAnimation(DisplayAttack);
+            if (PlantToMelee)
+            {
+                if (!isShowing)
+                    RunAttackAnimation(DisplayAttack);
+                else
+                {
+                    if (Time.time - time_init > 1.32)
+                    {
+                        RunAttackAnimation(DisplayAttack);
+                        CalcDamage();
+                        SetMoveType("done");
+                        PlantToMelee = false;
+                    }
+                }
+                
+            }
 
             CheckIfDone();
 
@@ -136,7 +159,7 @@ public class Plant : MonoBehaviour
         // have we made the allowable walking range? If we have, don't make it again
         if (!IsMapMade)
         {
-            int mpsz = gameObject.GetComponent<MapMatrixData>().MapSize;
+            int mpsz = Grid.GetComponent<MapMatrixData>().MapSize;
             int tiles = (int)Mathf.Round((float)(radius / 5));
             PMovementZone = new int[mpsz, mpsz];
 
@@ -162,7 +185,7 @@ public class Plant : MonoBehaviour
                         //only make the diamond
                         if (Mathf.Abs(((float)i) + Mathf.Abs((float)j)) <= tiles && -Mathf.Abs(((float)i) - Mathf.Abs((float)j)) >= -tiles)
                         {
-                            float BlockData = (float)gameObject.GetComponent<MapMatrixData>().BlockFeature[i + x, y + j];
+                            float BlockData = (float)Grid.GetComponent<MapMatrixData>().BlockFeature[i + x, y + j];
 
                             if (BlockData != -1)
                             {
@@ -210,8 +233,8 @@ public class Plant : MonoBehaviour
     private void PlantMoveToSpot(int xNew, int yNew)
     {
         //move our plant to it's new spot
-        Vector2 OldPos = gameObject.GetComponent<MapMatrixData>().GetBlockCoords(x, y, true);
-        Vector2 NewPos = gameObject.GetComponent<MapMatrixData>().GetBlockCoords(xNew, yNew, true);
+        Vector2 OldPos = Grid.GetComponent<MapMatrixData>().GetBlockCoords(x, y, true);
+        Vector2 NewPos = Grid.GetComponent<MapMatrixData>().GetBlockCoords(xNew, yNew, true);
 
         //extra garbage for when we animate
         NewPos.y = (float)(NewPos.y + 0.18);
@@ -229,12 +252,12 @@ public class Plant : MonoBehaviour
         //if in the first 20%, ramp up speed
         if (Mathf.Abs(perc) <= .2)
         {
-            step = (float)((float)(PMovementSpeed / 8.08135) * Time.deltaTime * (float)(Mathf.Abs(perc) + .3));
+            step = (float)((float)(PMovement / 8.08135) * Time.deltaTime * (float)(Mathf.Abs(perc) + .3));
         }
         else
         {
             //nice meme
-            step = (float)(PMovementSpeed / 8.008135) * Time.deltaTime;
+            step = (float)(PMovement / 8.008135) * Time.deltaTime;
         }
         transform.position = Vector2.MoveTowards(transform.position, NewPos, step);
 
@@ -245,9 +268,10 @@ public class Plant : MonoBehaviour
             IsMapMade = false;
             MoveLocked = false;
             //update our matrix space x and y
+            Grid.GetComponent<MapMatrixData>().SetBlockPlantLocation(x, y, "VOID");
             x = xNew;
             y = yNew;
-            gameObject.GetComponent<MapMatrixData>().BlockPlantLocation[x, y] = identifier;
+            Grid.GetComponent<MapMatrixData>().SetBlockPlantLocation(x, y, identifier);
         }
     }
 
@@ -406,7 +430,7 @@ public class Plant : MonoBehaviour
             double matx = Mathf.Round((float)(x2 + 2 * y2));
             double maty = Mathf.Round((float)(-x2 + 2 * y2));
 
-            int mpsz = gameObject.GetComponent<MapMatrixData>().MapSize;
+            int mpsz = Grid.GetComponent<MapMatrixData>().MapSize;
 
             //now that we have the coordinate in the matrix space, make sure it is within the matrix (>0)
             if (matx >= 0 && matx <= (double)(mpsz - 1))
@@ -416,7 +440,7 @@ public class Plant : MonoBehaviour
                     int matxin = (int)matx;
                     int matyin = (int)maty;
 
-                    string[,] PlantMapLayout = gameObject.GetComponent<MapMatrixData>().BlockPlantLocation;
+                    string[,] PlantMapLayout = Grid.GetComponent<MapMatrixData>().BlockPlantLocation;
 
                     switch (moveType)
                     {
@@ -425,7 +449,7 @@ public class Plant : MonoBehaviour
                             {
                                 //MOVEMENT
                                 //if that is an acceptable spot (within our PMoveZone), initiate movement
-                                if (PMovementZone[matxin, matyin] == 1)
+                                if (PMovementZone[matxin, matyin] == 1 && PlantMapLayout[matxin, matyin] == "VOID")
                                 {
                                     x_move = matxin;
                                     y_move = matyin;
@@ -486,6 +510,38 @@ public class Plant : MonoBehaviour
                                 }
                                 break;
                             }
+                        case "melee":
+                            {
+                                //RANGE ATTACK
+                                if (PlantMapLayout[matxin, matyin] != "VOID" && PMovementZone[matxin, matyin] == 1)
+                                {
+                                    //check to see that it's within range and on the enemy team
+                                    SelectedEnemy = GameObject.Find(PlantMapLayout[matxin, matyin]);
+                                    if (SelectedEnemy != null)
+                                    {
+                                        //if it's not on our team...
+                                        if (SelectedEnemy.GetComponent<Plant>().IsPlayerOneChar != IsPlayerOneChar)
+                                        {
+                                            //ready to melee!
+                                            IsMapMade = false;
+                                            MoveLocked = true;
+                                            PlantToMelee = true;
+
+                                            //delete the old Movement Zone data
+                                            for (int i = 0; i < mpsz; i++)
+                                            {
+                                                for (int j = 0; j < mpsz; j++)
+                                                {
+                                                    Destroy(MovementZoneObj[i, j]);
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                    return;
+                                }
+                                break;
+                            }
                         case "setup":
                             {
                                 //MOVEMENT
@@ -495,7 +551,7 @@ public class Plant : MonoBehaviour
                                     x = matxin;
                                     y = matyin;
 
-                                    Vector2 pos = gameObject.GetComponent<MapMatrixData>().GetBlockCoords(matxin, matyin, true);
+                                    Vector2 pos = Grid.GetComponent<MapMatrixData>().GetBlockCoords(matxin, matyin, true);
                                     pos.y += + (float)0.18;
 
                                     transform.position = pos;
@@ -508,7 +564,7 @@ public class Plant : MonoBehaviour
                                             Destroy(PlacementZoneObj[i, j]);
                                         }
                                     }
-
+                                    Grid.GetComponent<MapMatrixData>().SetBlockPlantLocation(x, y,identifier);
                                     moveType = "done";
                                     HasBeenSetup = true;
                                     return;
@@ -531,8 +587,8 @@ public class Plant : MonoBehaviour
         //here we fire the projectile and do ze math to make that arc look pretty
 
         //get firing locations
-        Vector2 OldPos = gameObject.GetComponent<MapMatrixData>().GetBlockCoords(x, y, true);
-        Vector2 NewPos = gameObject.GetComponent<MapMatrixData>().GetBlockCoords(x_shot, y_shot, true);
+        Vector2 OldPos = Grid.GetComponent<MapMatrixData>().GetBlockCoords(x, y, true);
+        Vector2 NewPos = Grid.GetComponent<MapMatrixData>().GetBlockCoords(x_shot, y_shot, true);
 
         //calibrate for plant height
         OldPos.y += .4f;
@@ -599,6 +655,7 @@ public class Plant : MonoBehaviour
             if (!preview)
             {
                 Destroy(fired_seed);
+                CalcDamage();
                 PlantToFire = false;
                 MoveLocked = false;
             }
@@ -629,7 +686,7 @@ public class Plant : MonoBehaviour
             double matx = Mathf.Round((float)(x + 2 * y));
             double maty = Mathf.Round((float)(-x + 2 * y));
 
-            int mpsz = gameObject.GetComponent<MapMatrixData>().MapSize;
+            int mpsz = Grid.GetComponent<MapMatrixData>().MapSize;
 
             //now that we have the coordinate in the matrix space, make sure it is within the matrix (>0)
             if (matx >= 0 && matx <= (double)(mpsz - 1))
@@ -660,10 +717,13 @@ public class Plant : MonoBehaviour
         string[] array = Identifier.Split(' ');
         plantType = array[0];
 
-        PMovementSpeed =    int.Parse(array[1]);
+        PMovement =         int.Parse(array[1]);
         PHealth =           int.Parse(array[2]);
         PAttack =           int.Parse(array[3]);
         PDefense =          int.Parse(array[4]);
+        PSpeed =            int.Parse(array[5]);
+        PSpAttack =         int.Parse(array[6]);
+        PSpDefense =        int.Parse(array[7]);
         IsPlayerOneChar = player_num;
 
         identifier = Identifier;
@@ -671,11 +731,18 @@ public class Plant : MonoBehaviour
 
     public void RunAttackAnimation(GameObject AttackAnimation)
     {
-        if (Input.GetKeyDown("e")) // if you press the E key
+        if (AttackAnimation != null)
         {
             isShowing = !isShowing;
             AttackAnimation.SetActive(isShowing); // display or not whatever is linked to the gameobject (canvas) (following the state of the bool)
-        }
+            if (SelectedEnemy != null)
+            {
+                GameObject EnemyAttackAnimation = SelectedEnemy.GetComponent<Plant>().HitByAttack;
+                if (EnemyAttackAnimation != null)
+                    EnemyAttackAnimation.SetActive(isShowing); // display or not whatever is linked to the gameobject (canvas) (following the state of the bool)
+            }
+            time_init = Time.time;
+        }  
 
     }
 
@@ -696,7 +763,28 @@ public class Plant : MonoBehaviour
 
     public void SetMoveType(string type)
     {
+        string PrevType = moveType;
         moveType = type;
+        int mpsz = Grid.GetComponent<MapMatrixData>().MapSize;
+        //for now, we delete movement zone
+        if (MovementZoneObj != null)
+        {
+            for (int i = 0; i < mpsz; i++)
+            {
+                for (int j = 0; j < mpsz; j++)
+                {
+                    Destroy(MovementZoneObj[i, j]);
+                }
+            }
+
+            if (ShotPreview != null)
+            {
+                for (int i = 0; i < 50; i++)
+                    Destroy(ShotPreview[i]);
+            }
+
+            IsMapMade = false;
+        }
     }
 
     private void AllowInitialPlantPlacement()
@@ -705,7 +793,7 @@ public class Plant : MonoBehaviour
         // have we made the allowable walking range? If we have, don't make it again
         if (!IsMapMadePlace)
         {
-            int mpsz = gameObject.GetComponent<MapMatrixData>().MapSize;
+            int mpsz = Grid.GetComponent<MapMatrixData>().MapSize;
             int radius = (int)Mathf.Round((float) (mpsz/2));
             x = radius;
             y = radius;
@@ -733,7 +821,7 @@ public class Plant : MonoBehaviour
                     if ((i + x) >= 0 && (i + x) <= mpsz - 1 && (j + y) >= 0 && (j + y) <= mpsz - 1)
                     {
 
-                            float BlockData = (float)gameObject.GetComponent<MapMatrixData>().BlockFeature[i + x, y + j];
+                            float BlockData = (float)Grid.GetComponent<MapMatrixData>().BlockFeature[i + x, y + j];
 
                             if (BlockData != -1)
                             {
@@ -778,9 +866,9 @@ public class Plant : MonoBehaviour
     //Make the sprite for the movement zone, if it is a valid spot
     private void AddBlockToPlaceRange(int x_block, int y_block)
     {
-        Vector2 pos = gameObject.GetComponent<MapMatrixData>().GetBlockCoords(x_block, y_block, true);
+        Vector2 pos = Grid.GetComponent<MapMatrixData>().GetBlockCoords(x_block, y_block, true);
         pos.y = (float)(pos.y - .175);
-        float BlockData = (float)gameObject.GetComponent<MapMatrixData>().BlockFeature[x_block, y_block];
+        float BlockData = (float)Grid.GetComponent<MapMatrixData>().BlockFeature[x_block, y_block];
 
         //if valid spot
         if (BlockData != -1 && PlacementZoneObj[x_block, y_block] == null)
@@ -808,7 +896,7 @@ public class Plant : MonoBehaviour
     {
         if (moveType == "done")
         {
-            int mpsz = gameObject.GetComponent<MapMatrixData>().MapSize;
+            int mpsz = Grid.GetComponent<MapMatrixData>().MapSize;
             IsMyTurn = false;
             if (IsPlayerOneChar)
             {
@@ -835,11 +923,51 @@ public class Plant : MonoBehaviour
                 }
             }
 
+            if (ShotPreview != null)
+            {
+                for (int i = 0; i < 50; i++)
+                    Destroy(ShotPreview[i]);
+            }
+
             PlantToMove = false;
             IsMapMade = false;
             MoveLocked = false;
 
         }
+    }
+
+    public void CalcDamage(string attType = "melee")
+    {
+        //you can probably guess what we do here...
+        //the damage dealer always does the calc for the damage taker
+        if (SelectedEnemy != null)
+        {
+            int EnHP = SelectedEnemy.GetComponent < Plant>().PHealth;
+            int EnDef = SelectedEnemy.GetComponent < Plant >().PDefense;
+            int EnSpDef = SelectedEnemy.GetComponent < Plant >().PSpDefense;
+
+            int DAM_Att = (PAttack - EnDef);
+            int DAM_SpAtt = (PSpAttack - EnSpDef);
+
+            if (DAM_Att < 0)
+                DAM_Att = 0;
+
+            if (DAM_SpAtt < 0)
+                DAM_SpAtt = 0;
+
+            int DAM_tot = DAM_Att + DAM_SpAtt;
+            if (DAM_tot < 1)
+                DAM_tot = 1;
+
+            if (DAM_tot > EnHP)
+            {
+                //ya dead, kid
+                //probably more to come here, I would think
+            }
+            SelectedEnemy.GetComponent < Plant >().PHealth = EnHP - DAM_tot;
+
+        }
+
     }
 
 }

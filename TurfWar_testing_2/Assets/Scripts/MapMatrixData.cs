@@ -41,7 +41,7 @@ public class MapMatrixData : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //for testing
     }
 
     public Vector2 GetBlockCoords(int x,int y, bool includeHeight = false)
@@ -60,6 +60,11 @@ public class MapMatrixData : MonoBehaviour
         }
 
         return pos;
+    }
+
+    public void SetBlockPlantLocation(int x, int y, string ident)
+    {
+        BlockPlantLocation[x, y] = ident;
     }
 
     void SetSpecialForMap()
