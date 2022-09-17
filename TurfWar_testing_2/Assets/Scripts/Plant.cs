@@ -575,6 +575,11 @@ public class Plant : MonoBehaviour
                                 }
                                 break;
                             }
+                        case "stats":
+                            {
+                                //we don't do anything special? 
+                                break;
+                            }
 
                     }
 
@@ -667,8 +672,6 @@ public class Plant : MonoBehaviour
             {
                 PlantShotPreview = false;
             }
-            // deal damage
-            // base.DealDamage(); ?
             FirstRun = true;
             
         }
@@ -959,8 +962,19 @@ public class Plant : MonoBehaviour
             if (DAM_SpAtt < 0)
                 DAM_SpAtt = 0;
 
-            int DAM_tot = DAM_Att + DAM_SpAtt;
-            if (DAM_tot < 1)
+            int DAM_tot = (int)((DAM_Att + DAM_SpAtt) * (1 - .5*Random.Range(0f, 1f)));
+            
+            float CritChance = Random.Range(0f, 1f);
+            bool Crit = false;
+
+            //  1/16 chance of crit
+            if (CritChance > 0.9375f)
+            {
+                //critical hit!
+                DAM_tot *=  2;
+                Crit = true;
+            }
+                if (DAM_tot < 1)
                 DAM_tot = 1;
 
             if (DAM_tot > EnHP)
@@ -971,8 +985,8 @@ public class Plant : MonoBehaviour
             SelectedEnemy.GetComponent < Plant >().PHealth = EnHP - DAM_tot;
 
             Vector2 pos = Grid.GetComponent<MapMatrixData>().GetBlockCoords(SelectedEnemy.GetComponent<Plant>().x, SelectedEnemy.GetComponent<Plant>().y, true);
-            pos.y = (float)(pos.y + .5);
-            pos.x = (float)(pos.x + .2);
+            pos.y = (float)(pos.y + .6);
+            pos.x = (float)(pos.x);
 
             Vector2 fin = new Vector2(pos.x,pos.y+.4f);
 
@@ -980,6 +994,18 @@ public class Plant : MonoBehaviour
             GameObject DamText = Instantiate(DamageTxt, pos, Quaternion.identity);
             DamText.GetComponent<TextBehavior>().isDamText = true;
             DamText.GetComponent<TextBehavior>().FinalPos = fin;
+
+            if (Crit == true)
+            {
+                //add a little crit text
+                DamageTxt.GetComponent<TMPro.TextMeshProUGUI>().text = "crit!";
+                pos.y = (float)(pos.y + .3);
+                fin.y = pos.y + .4f;
+                GameObject CritText = Instantiate(DamageTxt, pos, Quaternion.identity);
+                CritText.GetComponent<TextBehavior>().isDamText = true;
+                CritText.GetComponent<TextBehavior>().FinalPos = fin;
+
+            }
 
         }
 
