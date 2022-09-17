@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Plant : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class Plant : MonoBehaviour
     public bool IsPlayerOneChar;
     public bool HasBeenSetup = false;
     private bool IsUnderground = false;
+    public bool TriggerDamText = false;
 
     //GameObjs
 
@@ -42,6 +44,7 @@ public class Plant : MonoBehaviour
     private GameObject DisplayAttack;
     private GameObject HitByAttack;
     public GameObject Grid;
+    public GameObject DamageTxt;
 
     //plant specific data
 
@@ -75,6 +78,7 @@ public class Plant : MonoBehaviour
         animator = GetComponent<Animator>();
         moveType = "move";
         Grid = GameObject.Find("Grid");
+        DamageTxt = GameObject.Find("DamgText");
     }
 
     // Update is called once per frame
@@ -965,6 +969,17 @@ public class Plant : MonoBehaviour
                 //probably more to come here, I would think
             }
             SelectedEnemy.GetComponent < Plant >().PHealth = EnHP - DAM_tot;
+
+            Vector2 pos = Grid.GetComponent<MapMatrixData>().GetBlockCoords(SelectedEnemy.GetComponent<Plant>().x, SelectedEnemy.GetComponent<Plant>().y, true);
+            pos.y = (float)(pos.y + .5);
+            pos.x = (float)(pos.x + .2);
+
+            Vector2 fin = new Vector2(pos.x,pos.y+.4f);
+
+            DamageTxt.GetComponent<TMPro.TextMeshProUGUI>().text = DAM_tot.ToString();
+            GameObject DamText = Instantiate(DamageTxt, pos, Quaternion.identity);
+            DamText.GetComponent<TextBehavior>().isDamText = true;
+            DamText.GetComponent<TextBehavior>().FinalPos = fin;
 
         }
 
