@@ -962,7 +962,7 @@ public class Plant : MonoBehaviour
             if (DAM_SpAtt < 0)
                 DAM_SpAtt = 0;
 
-            int DAM_tot = (int)((DAM_Att + DAM_SpAtt) * (1 - .5*Random.Range(0f, 1f)));
+            int DAM_tot = (int)((DAM_Att + DAM_SpAtt) * (1 - .5*Random.Range(0f, 1f) / 2));
             
             float CritChance = Random.Range(0f, 1f);
             bool Crit = false;

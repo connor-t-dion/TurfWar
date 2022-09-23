@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
                 UIisUp = true;
             }
 
-            if (!isPlayer1)
+            if (!isPlayer1 && !isSetup)
             {
                 //activate AI
                 CPU_AI();

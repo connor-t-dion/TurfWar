@@ -150,7 +150,7 @@ RectTransform:
   m_GameObject: {fileID: 160048037}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_LocalScale: {x: 500, y: 500, z: 600}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 566093626}
@@ -1630,7 +1630,7 @@ MonoBehaviour:
   plantType: 
   moveType: notMyTurn
   seed: {fileID: 697715255}
-  DisplayAtk: {fileID: 1566367908}
+  DisplayAtk: {fileID: 160048037}
   HitByAtk: {fileID: 0}
   identifier2: carrot
 --- !u!1 &566093625
@@ -1764,7 +1764,7 @@ Transform:
   m_GameObject: {fileID: 588296012}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_LocalScale: {x: 500, y: 500, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 566093626}
@@ -3893,7 +3893,7 @@ Transform:
   m_GameObject: {fileID: 1566367908}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_LocalScale: {x: 500, y: 500, z: 300}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 566093626}
@@ -4758,8 +4758,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000000089407, y: -0.66}
-  m_SizeDelta: {x: 240, y: 160}
+  m_AnchoredPosition: {x: -0.000000089407, y: -50.999966}
+  m_SizeDelta: {x: 1200, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1792642871
 MonoBehaviour:
