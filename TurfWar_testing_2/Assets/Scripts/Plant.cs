@@ -65,7 +65,7 @@ public class Plant : MonoBehaviour
 
     private Animator animator;
 
-    
+
     private bool isShowing = false; //Create a Boolian for displaying the assigned item
 
     // Start is called before the first frame update
@@ -105,7 +105,7 @@ public class Plant : MonoBehaviour
             {
                 FireProjectilePath(preview_square, "arc", true);
             }
-                
+
             //left click
             if (Input.GetMouseButtonDown(0))
             {
@@ -133,14 +133,14 @@ public class Plant : MonoBehaviour
                         PlantToMelee = false;
                     }
                 }
-                
+
             }
 
             CheckIfDone();
 
         }
 
-        
+
 
     }
 
@@ -369,7 +369,7 @@ public class Plant : MonoBehaviour
                 {
                     animator.SetInteger("Carrot_Is_Moving", 1);
                 }
-                
+
             }
 
             // Move Right Down
@@ -556,7 +556,7 @@ public class Plant : MonoBehaviour
                                     y = matyin;
 
                                     Vector2 pos = Grid.GetComponent<MapMatrixData>().GetBlockCoords(matxin, matyin, true);
-                                    pos.y += + (float)0.18;
+                                    pos.y += +(float)0.18;
 
                                     transform.position = pos;
 
@@ -568,7 +568,7 @@ public class Plant : MonoBehaviour
                                             Destroy(PlacementZoneObj[i, j]);
                                         }
                                     }
-                                    Grid.GetComponent<MapMatrixData>().SetBlockPlantLocation(x, y,identifier);
+                                    Grid.GetComponent<MapMatrixData>().SetBlockPlantLocation(x, y, identifier);
                                     moveType = "done";
                                     HasBeenSetup = true;
                                     return;
@@ -586,7 +586,7 @@ public class Plant : MonoBehaviour
                 }
 
             }
-            
+
         }
     }
 
@@ -643,7 +643,7 @@ public class Plant : MonoBehaviour
             float Y = OldPos.y + v_zo * t_prime + .5f * a * t_prime * t_prime;
 
             Vector2 NewPos2 = new Vector2(X, Y);
-            fired_seed.transform.position = NewPos2; 
+            fired_seed.transform.position = NewPos2;
         }
         else if (preview && Time.time - time_between > .15f && incr < 50)
         {
@@ -673,7 +673,7 @@ public class Plant : MonoBehaviour
                 PlantShotPreview = false;
             }
             FirstRun = true;
-            
+
         }
 
     }
@@ -714,7 +714,7 @@ public class Plant : MonoBehaviour
                         y_shot = matyin;
                         PlantShotPreview = true;
                     }
-                 }
+                }
             }
         }
     }
@@ -724,13 +724,13 @@ public class Plant : MonoBehaviour
         string[] array = Identifier.Split(' ');
         plantType = array[0];
 
-        PMovement =         int.Parse(array[1]);
-        PHealth =           int.Parse(array[2]);
-        PAttack =           int.Parse(array[3]);
-        PDefense =          int.Parse(array[4]);
-        PSpeed =            int.Parse(array[5]);
-        PSpAttack =         int.Parse(array[6]);
-        PSpDefense =        int.Parse(array[7]);
+        PMovement = int.Parse(array[1]);
+        PHealth = int.Parse(array[2]);
+        PAttack = int.Parse(array[3]);
+        PDefense = int.Parse(array[4]);
+        PSpeed = int.Parse(array[5]);
+        PSpAttack = int.Parse(array[6]);
+        PSpDefense = int.Parse(array[7]);
         IsPlayerOneChar = player_num;
 
         identifier = Identifier;
@@ -749,7 +749,7 @@ public class Plant : MonoBehaviour
                     EnemyAttackAnimation.SetActive(isShowing); // display or not whatever is linked to the gameobject (canvas) (following the state of the bool)
             }
             time_init = Time.time;
-        }  
+        }
 
     }
 
@@ -801,7 +801,7 @@ public class Plant : MonoBehaviour
         if (!IsMapMadePlace)
         {
             int mpsz = Grid.GetComponent<MapMatrixData>().MapSize;
-            int radius = (int)Mathf.Round((float) (mpsz/2));
+            int radius = (int)Mathf.Round((float)(mpsz / 2));
             x = radius;
             y = radius;
             radius *= 2;
@@ -828,40 +828,40 @@ public class Plant : MonoBehaviour
                     if ((i + x) >= 0 && (i + x) <= mpsz - 1 && (j + y) >= 0 && (j + y) <= mpsz - 1)
                     {
 
-                            float BlockData = (float)Grid.GetComponent<MapMatrixData>().BlockFeature[i + x, y + j];
+                        float BlockData = (float)Grid.GetComponent<MapMatrixData>().BlockFeature[i + x, y + j];
 
-                            if (BlockData != -1)
+                        if (BlockData != -1)
+                        {
+                            AddBlockToPlaceRange(x + i, y + j);
+                        }
+                        //If we aren't a real block
+                        else
+                        {
+                            //add the block above it to the range 
+                            if ((i + x + 1) >= 0 && (i + x + 1) <= mpsz - 1 &&
+                                (j + y + 1) >= 0 && (j + y + 1) <= mpsz - 1)
                             {
-                                AddBlockToPlaceRange(x + i, y + j);
-                            }
-                            //If we aren't a real block
-                            else
-                            {
-                                //add the block above it to the range 
-                                if ((i + x + 1) >= 0 && (i + x + 1) <= mpsz - 1 &&
-                                    (j + y + 1) >= 0 && (j + y + 1) <= mpsz - 1)
-                                {
-                                    //(IF WE DONT ALREADY HAVE THAT IN OUR DIAMOND)
-                                    if ((Mathf.Abs(((float)i + 1) + Mathf.Abs((float)j + 1)) > tiles ||
-                                        -Mathf.Abs(((float)i + 1) - Mathf.Abs((float)j + 1)) < -tiles))
+                                //(IF WE DONT ALREADY HAVE THAT IN OUR DIAMOND)
+                                if ((Mathf.Abs(((float)i + 1) + Mathf.Abs((float)j + 1)) > tiles ||
+                                    -Mathf.Abs(((float)i + 1) - Mathf.Abs((float)j + 1)) < -tiles))
 
-                                    {
-                                        AddBlockToPlaceRange(x + i + 1, y + j + 1);
-                                    }
-                                }
-                                //and add below it
-                                if ((i + x - 1) >= 0 && (i + x - 1) <= mpsz - 1 &&
-                                    (j + y - 1) >= 0 && (j + y - 1) <= mpsz - 1)
                                 {
-                                    //(IF WE DONT ALREADY HAVE THAT IN OUR DIAMOND)
-                                    if ((Mathf.Abs(((float)i - 1) + Mathf.Abs((float)j - 1)) > tiles ||
-                                        -Mathf.Abs(((float)i - 1) - Mathf.Abs((float)j - 1)) < -tiles))
-
-                                    {
-                                        AddBlockToPlaceRange(x + i - 1, y + j - 1);
-                                    }
+                                    AddBlockToPlaceRange(x + i + 1, y + j + 1);
                                 }
                             }
+                            //and add below it
+                            if ((i + x - 1) >= 0 && (i + x - 1) <= mpsz - 1 &&
+                                (j + y - 1) >= 0 && (j + y - 1) <= mpsz - 1)
+                            {
+                                //(IF WE DONT ALREADY HAVE THAT IN OUR DIAMOND)
+                                if ((Mathf.Abs(((float)i - 1) + Mathf.Abs((float)j - 1)) > tiles ||
+                                    -Mathf.Abs(((float)i - 1) - Mathf.Abs((float)j - 1)) < -tiles))
+
+                                {
+                                    AddBlockToPlaceRange(x + i - 1, y + j - 1);
+                                }
+                            }
+                        }
 
                     }
                 }
@@ -943,15 +943,15 @@ public class Plant : MonoBehaviour
         }
     }
 
-    public void CalcDamage(string attType = "melee")
+    public void CalcDamage(string attType = "melee", bool DoActualDamage = true)
     {
         //you can probably guess what we do here...
         //the damage dealer always does the calc for the damage taker
         if (SelectedEnemy != null)
         {
-            int EnHP = SelectedEnemy.GetComponent < Plant>().PHealth;
-            int EnDef = SelectedEnemy.GetComponent < Plant >().PDefense;
-            int EnSpDef = SelectedEnemy.GetComponent < Plant >().PSpDefense;
+            int EnHP = SelectedEnemy.GetComponent<Plant>().PHealth;
+            int EnDef = SelectedEnemy.GetComponent<Plant>().PDefense;
+            int EnSpDef = SelectedEnemy.GetComponent<Plant>().PSpDefense;
 
             int DAM_Att = (PAttack - EnDef);
             int DAM_SpAtt = (PSpAttack - EnSpDef);
@@ -962,8 +962,8 @@ public class Plant : MonoBehaviour
             if (DAM_SpAtt < 0)
                 DAM_SpAtt = 0;
 
-            int DAM_tot = (int)((DAM_Att + DAM_SpAtt) * (1 - .5*Random.Range(0f, 1f) / 2));
-            
+            int DAM_tot = (int)((DAM_Att + DAM_SpAtt) * (1 - .5 * Random.Range(0f, 1f) / 2));
+
             float CritChance = Random.Range(0f, 1f);
             bool Crit = false;
 
@@ -971,10 +971,10 @@ public class Plant : MonoBehaviour
             if (CritChance > 0.9375f)
             {
                 //critical hit!
-                DAM_tot *=  2;
+                DAM_tot *= 2;
                 Crit = true;
             }
-                if (DAM_tot < 1)
+            if (DAM_tot < 1)
                 DAM_tot = 1;
 
             if (DAM_tot > EnHP)
@@ -982,34 +982,137 @@ public class Plant : MonoBehaviour
                 //ya dead, kid
                 //probably more to come here, I would think
             }
-            SelectedEnemy.GetComponent < Plant >().PHealth = EnHP - DAM_tot;
 
-            Vector2 pos = Grid.GetComponent<MapMatrixData>().GetBlockCoords(SelectedEnemy.GetComponent<Plant>().x, SelectedEnemy.GetComponent<Plant>().y, true);
-            pos.y = (float)(pos.y + .6);
-            pos.x = (float)(pos.x);
-
-            Vector2 fin = new Vector2(pos.x,pos.y+.4f);
-
-            DamageTxt.GetComponent<TMPro.TextMeshProUGUI>().text = DAM_tot.ToString();
-            GameObject DamText = Instantiate(DamageTxt, pos, Quaternion.identity);
-            DamText.GetComponent<TextBehavior>().isDamText = true;
-            DamText.GetComponent<TextBehavior>().FinalPos = fin;
-
-            if (Crit == true)
+            if (DoActualDamage)
             {
-                //add a little crit text
-                DamageTxt.GetComponent<TMPro.TextMeshProUGUI>().text = "crit!";
-                pos.y = (float)(pos.y + .3);
-                fin.y = pos.y + .4f;
-                GameObject CritText = Instantiate(DamageTxt, pos, Quaternion.identity);
-                CritText.GetComponent<TextBehavior>().isDamText = true;
-                CritText.GetComponent<TextBehavior>().FinalPos = fin;
+                SelectedEnemy.GetComponent<Plant>().PHealth = EnHP - DAM_tot;
 
+                Vector2 pos = Grid.GetComponent<MapMatrixData>().GetBlockCoords(SelectedEnemy.GetComponent<Plant>().x, SelectedEnemy.GetComponent<Plant>().y, true);
+                pos.y = (float)(pos.y + .6);
+                pos.x = (float)(pos.x);
+
+                Vector2 fin = new Vector2(pos.x, pos.y + .4f);
+
+                DamageTxt.GetComponent<TMPro.TextMeshProUGUI>().text = DAM_tot.ToString();
+                GameObject DamText = Instantiate(DamageTxt, pos, Quaternion.identity);
+                DamText.GetComponent<TextBehavior>().isDamText = true;
+                DamText.GetComponent<TextBehavior>().FinalPos = fin;
+
+                if (Crit == true)
+                {
+                    //add a little crit text
+                    DamageTxt.GetComponent<TMPro.TextMeshProUGUI>().text = "crit!";
+                    pos.y = (float)(pos.y + .3);
+                    fin.y = pos.y + .4f;
+                    GameObject CritText = Instantiate(DamageTxt, pos, Quaternion.identity);
+                    CritText.GetComponent<TextBehavior>().isDamText = true;
+                    CritText.GetComponent<TextBehavior>().FinalPos = fin;
+
+                }
             }
 
         }
 
     }
 
-}
+    public void AI_PlantView()
+    {
+
+    }
+
+    public float[,] GetCurrentPosition()
+    {
+        //returns the current "board position" matrix. This includes player health, positions, etc
+    }
+
+    private float[,] GetNextPosition(float[,] CurrentPos, int MoveDescription)
+    {
+        //from our starting position, get the next one given a certain move
+        //we can also use this to "go down the rabbit hole" for future moves
+        //Updating position is tough based on an integer. But basically we need a numerical system that can assess all of these moves.
+
+        /*
+         * We count all moves in a spiral starting north going clockwise and out. We then look at all actions after that move.
+         * Therefore, movement type can be determined by taking the mod based on total other move types (based on our formula)
+         *   6
+         *  517
+         *  4 28
+         *   39
+         *   etc.
+         * From here we can give a sense of whether it is possible or not as well. 
+         * If it's not a possible move (IE we shoot nothing, move somewhere impossible), we can return a NULL Vector2
+         * 
+         * The Vector2 we send back: Block Coordinates of each Plant, along with their health, totalling at a length of 24, 32 with names. This should be plenty of info and we can calc from here.  
+         * 
+         * We can also use this Vector to check for transmutations. It'll allow us to quickly assess scenarios we have already evaluated that go to the position in a different way
+         */
+    }
+
+    private float PositionScore(float[,] CurrentPos, float[,] Weights)
+    {
+        //given our score weights, determine how favorable the position is
+        float score;
+        bool winning;
+
+        //are ya winnin, son?
+        if (winning)
+            return inf;
+
+        //METRICS
+        //Everything has to be normalized to the max value. Ie health totals divided by total possible health.
+
+        //number of enemies alive
+        float E = -1;
+        //health of enemies (total)
+        float EH = -1;
+        //number of teammates
+        float F = 1;
+        //total team health
+        float FH = 1;
+
+        score = Weights[0] * E + Weights[1] * EH + Weights[2] * F + Weights[3] * FH;
+
+        return score;
+    }
+
+    public float MoveMinMax(float [,] position, int SD, float alpha, float beta, bool isPlayer1)
+    {
+        /*
+        if SD == 1 || game over in position
+            Return PositionScore(position, weights)
+
+        if (isPlayer1)
+        {
+            maxEval = -infinity
+            foreach child of position
+            {
+                // Get the next plant in order
+                isPlayer1 = checkPlantPlayer;
+                // get plant move, check feasibility, update board with move combo
+                eval = Minimax(position, SD - 1, alpha, beta, isPlayer1)
+                maxEval = max(maxEval, eval);
+                Alpha = max(alpha, eval)
+                if beta <= alpha
+                    break
+            }
+            return MaxEval;
+        }
+        else
+        {
+            minEval = infinity
+            foreach child of position
+            {
+                // Get the next plant in order
+                isPlayer1 = checkPlantPlayer;
+                // get plant move, check feasibility, update board with move combo
+                eval = Minimax(position, SD - 1, alpha, beta, isPlayer1)
+                minEval = min(minEval, eval);
+                beta = min(beta, minEval);
+                if beta <= alpha
+                    break
+            }
+            return minEval;
+        }
+        */
+    }
 
