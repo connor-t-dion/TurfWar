@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fd22ae65affe74848830196d32cf2a40
+guid: 2661aa72b5d04bd48a8cc7118dbc9789
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -49,7 +49,7 @@ TextureImporter:
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -104,13 +104,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_0
+      name: Turf_War_Sunflower_basic_attack_animation_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 128
-        width: 180
-        height: 64
+        y: 384
+        width: 540
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -118,62 +118,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 74fa3cc1a5914e547a93184a754535a5
-      internalID: -2028666571
+      spriteID: 1f61b2788f147814eb6f6f644d782ab4
+      internalID: 585935079
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_1
-      rect:
-        serializedVersion: 2
-        x: 180
-        y: 128
-        width: 180
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3c74801928e92f54d903457d7a905f5b
-      internalID: 104792107
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_2
-      rect:
-        serializedVersion: 2
-        x: 360
-        y: 128
-        width: 180
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f0485c40bc13a434fbb172918a8d9644
-      internalID: -614022845
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_3
+      name: Turf_War_Sunflower_basic_attack_animation_1
       rect:
         serializedVersion: 2
         x: 540
-        y: 128
-        width: 180
-        height: 64
+        y: 384
+        width: 540
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -181,20 +139,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 35ff957974c086c42ae6a22a612afe8e
-      internalID: 1550120316
+      spriteID: 11424651455b3cc4389e0b2a88d9e106
+      internalID: -273831306
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_4
+      name: Turf_War_Sunflower_basic_attack_animation_2
       rect:
         serializedVersion: 2
-        x: 720
-        y: 128
-        width: 180
-        height: 64
+        x: 1080
+        y: 384
+        width: 540
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -202,20 +160,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6bac69f51fbfd334980337b14e69824f
-      internalID: -1789270810
+      spriteID: 96d26f747e10b2a4da4e7b8091525baa
+      internalID: -1357795742
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_5
+      name: Turf_War_Sunflower_basic_attack_animation_3
       rect:
         serializedVersion: 2
-        x: 900
-        y: 128
-        width: 180
-        height: 64
+        x: 1620
+        y: 384
+        width: 540
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -223,20 +181,62 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e9f00ffca5e97e241a8d4960168d855f
-      internalID: 2050961480
+      spriteID: 53ff46b022033ea468c35917ebf06109
+      internalID: -208539645
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_6
+      name: Turf_War_Sunflower_basic_attack_animation_4
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 384
+        width: 540
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25a00a45bccc0e74692a384eb2e3cabb
+      internalID: -1628518508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Turf_War_Sunflower_basic_attack_animation_5
+      rect:
+        serializedVersion: 2
+        x: 2700
+        y: 384
+        width: 540
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d59efbacae64c2418855d5de3799f27
+      internalID: 112243005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Turf_War_Sunflower_basic_attack_animation_6
       rect:
         serializedVersion: 2
         x: 0
-        y: 64
-        width: 180
-        height: 64
+        y: 192
+        width: 540
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -244,62 +244,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5c58adb650791e242a9749bead6162c9
-      internalID: -86593340
+      spriteID: 527c0b6eece82a147927ba9237006390
+      internalID: -768364265
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_7
-      rect:
-        serializedVersion: 2
-        x: 180
-        y: 64
-        width: 180
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2c46db66dba05d34c818a022ba14ea2b
-      internalID: 349107424
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_8
-      rect:
-        serializedVersion: 2
-        x: 360
-        y: 64
-        width: 180
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 77be757a180f2f749b085589663c4625
-      internalID: 1737674265
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_9
+      name: Turf_War_Sunflower_basic_attack_animation_7
       rect:
         serializedVersion: 2
         x: 540
-        y: 64
-        width: 180
-        height: 64
+        y: 192
+        width: 540
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -307,20 +265,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cebd0fd1c0c502f4a8f6da5f268b1d51
-      internalID: 1737832208
+      spriteID: 3e15212db65ef2e439a0467395a0928d
+      internalID: 2117519866
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_10
+      name: Turf_War_Sunflower_basic_attack_animation_8
       rect:
         serializedVersion: 2
-        x: 720
-        y: 64
-        width: 180
-        height: 64
+        x: 1080
+        y: 192
+        width: 540
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -328,20 +286,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 06a47a247d3bae0489db0e4546e99631
-      internalID: 1680771155
+      spriteID: 30f84e1d26e80b447ab37e9c26c0db19
+      internalID: -2118811764
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_11
+      name: Turf_War_Sunflower_basic_attack_animation_9
       rect:
         serializedVersion: 2
-        x: 900
-        y: 64
-        width: 180
-        height: 64
+        x: 1620
+        y: 192
+        width: 540
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -349,20 +307,62 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6e181c204f43431458f8fb1420344e23
-      internalID: -1187870295
+      spriteID: 6d55b4c43022fb740908a3863fbf533b
+      internalID: -1176702874
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_12
+      name: Turf_War_Sunflower_basic_attack_animation_10
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 192
+        width: 540
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1a4d7e33382b9e4e944b9cf67def326
+      internalID: -1014232436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Turf_War_Sunflower_basic_attack_animation_11
+      rect:
+        serializedVersion: 2
+        x: 2700
+        y: 192
+        width: 540
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8996579db3fdee4dadbce876aeabe22
+      internalID: -1225450074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Turf_War_Sunflower_basic_attack_animation_12
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 180
-        height: 64
+        width: 540
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -370,62 +370,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f371df95527d2404b95ccea6a584c7d5
-      internalID: 128526747
+      spriteID: 22afa3ebc5b9359488bb537358da6b64
+      internalID: -684546709
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_13
-      rect:
-        serializedVersion: 2
-        x: 180
-        y: 0
-        width: 180
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 69e62d047a131b840b704166f7751f17
-      internalID: -1101455058
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_14
-      rect:
-        serializedVersion: 2
-        x: 360
-        y: 0
-        width: 180
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d6f7ee01e7daabc4a9755482ace16aaa
-      internalID: 428640919
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_15
+      name: Turf_War_Sunflower_basic_attack_animation_13
       rect:
         serializedVersion: 2
         x: 540
         y: 0
-        width: 180
-        height: 64
+        width: 540
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -433,20 +391,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1db892f527dd5da49a722c5dc95d0582
-      internalID: -1099496802
+      spriteID: 50b37dc9f60cf924f84318e1ef807f5b
+      internalID: -787356165
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_16
+      name: Turf_War_Sunflower_basic_attack_animation_14
       rect:
         serializedVersion: 2
-        x: 720
+        x: 1080
         y: 0
-        width: 180
-        height: 64
+        width: 540
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -454,20 +412,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f75016c2ce154eb4698d46b27759e8d5
-      internalID: 1553768246
+      spriteID: ecdfd77ef8e5a6e44b3a948e48a59557
+      internalID: -1359368871
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Turf_War_Carrot_Attack_Animation_17
+      name: Turf_War_Sunflower_basic_attack_animation_15
       rect:
         serializedVersion: 2
-        x: 900
+        x: 1620
         y: 0
-        width: 180
-        height: 64
+        width: 540
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -475,8 +433,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 812747ff33e6bfe489e66f529675a7cc
-      internalID: 1306381634
+      spriteID: 65fa2117edcfd8d4fa1bad837fd192c8
+      internalID: 1567431188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Turf_War_Sunflower_basic_attack_animation_16
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 0
+        width: 540
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27819fedaf285bc4190e48450b8fe04c
+      internalID: 744538205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Turf_War_Sunflower_basic_attack_animation_17
+      rect:
+        serializedVersion: 2
+        x: 2700
+        y: 0
+        width: 540
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0d0495a5cb43a442a239819afffb1d7
+      internalID: -1044172646
       vertices: []
       indices: 
       edges: []
@@ -492,24 +492,24 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Turf_War_Carrot_Attack_Animation_15: -1099496802
-      Turf_War_Carrot_Attack_Animation_5: 2050961480
-      Turf_War_Carrot_Attack_Animation_4: -1789270810
-      Turf_War_Carrot_Attack_Animation_17: 1306381634
-      Turf_War_Carrot_Attack_Animation_3: 1550120316
-      Turf_War_Carrot_Attack_Animation_13: -1101455058
-      Turf_War_Carrot_Attack_Animation_1: 104792107
-      Turf_War_Carrot_Attack_Animation_16: 1553768246
-      Turf_War_Carrot_Attack_Animation_14: 428640919
-      Turf_War_Carrot_Attack_Animation_7: 349107424
-      Turf_War_Carrot_Attack_Animation_11: -1187870295
-      Turf_War_Carrot_Attack_Animation_9: 1737832208
-      Turf_War_Carrot_Attack_Animation_10: 1680771155
-      Turf_War_Carrot_Attack_Animation_8: 1737674265
-      Turf_War_Carrot_Attack_Animation_2: -614022845
-      Turf_War_Carrot_Attack_Animation_6: -86593340
-      Turf_War_Carrot_Attack_Animation_0: -2028666571
-      Turf_War_Carrot_Attack_Animation_12: 128526747
+      Turf_War_Sunflower_basic_attack_animation_13: -787356165
+      Turf_War_Sunflower_basic_attack_animation_7: 2117519866
+      Turf_War_Sunflower_basic_attack_animation_4: -1628518508
+      Turf_War_Sunflower_basic_attack_animation_8: -2118811764
+      Turf_War_Sunflower_basic_attack_animation_2: -1357795742
+      Turf_War_Sunflower_basic_attack_animation_10: -1014232436
+      Turf_War_Sunflower_basic_attack_animation_16: 744538205
+      Turf_War_Sunflower_basic_attack_animation_5: 112243005
+      Turf_War_Sunflower_basic_attack_animation_6: -768364265
+      Turf_War_Sunflower_basic_attack_animation_12: -684546709
+      Turf_War_Sunflower_basic_attack_animation_0: 585935079
+      Turf_War_Sunflower_basic_attack_animation_15: 1567431188
+      Turf_War_Sunflower_basic_attack_animation_1: -273831306
+      Turf_War_Sunflower_basic_attack_animation_11: -1225450074
+      Turf_War_Sunflower_basic_attack_animation_17: -1044172646
+      Turf_War_Sunflower_basic_attack_animation_14: -1359368871
+      Turf_War_Sunflower_basic_attack_animation_9: -1176702874
+      Turf_War_Sunflower_basic_attack_animation_3: -208539645
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
